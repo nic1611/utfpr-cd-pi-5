@@ -8,3 +8,5 @@ seguintes disciplinas do Módulo 5:
 - Tópicos Especiais em Ciência de Dados.
 
 #### Artigo base [aqui](http://sites.labic.icmc.usp.br/pub/mcmonard/CintraC3N09.pdf)
+
+#### Fuzzy Classification for Iris DataSet [aqui](https://csg.uobabylon.edu.iq/fileshare/articles/repository1_publication17124_25_1341.pdf)
