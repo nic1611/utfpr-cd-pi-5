@@ -1,0 +1,169 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(datasets)
+library(dplyr)
+data(iris)
+summary(iris)
+```
+
+```{r}
+iris %>% 
+  distinct(Sepal.Length, Species)
+```
+
+```{r}
+library(dplyr)
+newcases <- count(iris, Sepal.Length)
+uniqueSepalLength <- filter(newcases, n == 1)
+iris %>% filter(Sepal.Length %in% uniqueSepalLength$Sepal.Length) %>% select(Sepal.Length, Species)
+```
+
+```{r}
+library(dplyr)
+newcases <- count(iris, Sepal.Width)
+uniqueSepalWidth <- filter(newcases, n == 1)
+iris %>% filter(Sepal.Width %in% uniqueSepalWidth$Sepal.Width) %>% select(Sepal.Width, Species)
+```
+
+```{r}
+library(dplyr)
+newcases <- count(iris, Petal.Length)
+uniquePetalLength <- filter(newcases, n == 1)
+iris %>% filter(Petal.Length %in% uniquePetalLength$Petal.Length) %>% select(Petal.Length, Species)
+```
+
+```{r}
+versicolor <- iris %>% filter(Species == 'versicolor') %>% select(Sepal.Length, Species)
+versicolor
+versicolorMedian <- median(versicolor$Sepal.Length)
+versicolorMedian
+```
+
+
+```{r}
+virginica <- iris %>% filter(Species == 'virginica') %>% select(Sepal.Width, Species)
+virginicaMedian <- median(virginica$Sepal.Width)
+virginicaMedian
+```
+
+
+
+```{r}
+library(FuzzyR)
+```
+
+```{r}
+fis <- newfis('iris', fisType = 'tsk')
+```
+singletonmf
+Adicionando as variaveis de input e output
+```{r}
+fis <- addvar(fis, 'input', 'SepalLength', c(4.2, 8))
+fis <- addvar(fis, 'input', 'SepalWidth', c(1.9, 5.9))
+fis <- addvar(fis, 'input', 'PetalLength', c(0.9, 7))
+fis <- addvar(fis, 'input', 'PetalWidth', c(0.9, 7))
+fis <- addvar(fis, 'output', 'classe', c(1, 3))
+```
+
+Adicionando termos linguisticos a variavel SepalLength
+```{r}
+fis <- addmf(fis, 'input', 1, 'short', 'trapmf', c(4.2,4.2,5.3,5.9))
+fis <- addmf(fis, 'input', 1, 'med', 'trimf', c(4.8,5.9,7.1))
+fis <- addmf(fis, 'input', 1, 'long', 'trapmf', c(4.8,7.1,8,8))
+```
+
+Adicionando termos linguisticos a variavel SepalWidth
+```{r}
+fis <- addmf(fis, 'input', 2, 'narrow', 'trapmf', c(1.9,1.9,2.0,3.5))
+fis <- addmf(fis, 'input', 2, 'med', 'trimf', c(2.1,3.0,3.9))
+fis <- addmf(fis, 'input', 2, 'wide', 'trapmf', c(2.2,4.0,5.9,5.9))
+```
+
+Adicionando termos linguisticos a variavel PetalLength
+```{r}
+fis <- addmf(fis, 'input', 3, 'small', 'trapmf', c(0.9,0.9,1.0,2.9))
+fis <- addmf(fis, 'input', 3, 'med', 'trapmf', c(2.9,2.9,3.0, 5.2))
+fis <- addmf(fis, 'input', 3, 'large', 'trapmf', c(4.4,6.6,7.0,7.0))
+```
+
+Adicionando termos linguisticos a variavel PetalWidth
+```{r}
+fis <- addmf(fis, 'input', 4, 'narrow', 'trapmf', c(0.9,0.9,1.0,2.9))
+fis <- addmf(fis, 'input', 4, 'med', 'trapmf', c(2.9,2.9,3.0, 5.2))
+fis <- addmf(fis, 'input', 4, 'wide', 'trapmf', c(4.4,6.6,7.0,7.0))
+```
+
+Adicionando termos linguisticos a variavel PetalWidth
+```{r}
+fis <- addmf(fis, 'output', 1, 'C11', 'singletonmf', c(1))
+fis <- addmf(fis, 'output', 1, 'C12', 'singletonmf', c(2))
+fis <- addmf(fis, 'output', 1, 'C13', 'singletonmf', c(3))
+```
+
+Adicionando as especificações de regras
+```{r}
+fis <- addrule(fis, c(1, 3, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(1, 3, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(1, 1, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(1, 1, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(1, 2, 1, 1, 2, 1, 1))
+fis <- addrule(fis, c(1, 3, 3, 3, 2, 1, 1))
+fis <- addrule(fis, c(1, 2, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(1, 1, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(1, 2, 2, 3, 3, 1, 1))
+fis <- addrule(fis, c(1, 2, 3, 2, 3, 1, 1))
+fis <- addrule(fis, c(1, 1, 2, 3, 2, 1, 1))
+fis <- addrule(fis, c(1, 1, 3, 2, 2, 1, 1))
+fis <- addrule(fis, c(1, 2, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(1, 3, 2, 3, 2, 1, 1))
+fis <- addrule(fis, c(1, 3, 3, 2, 2, 1, 1))
+fis <- addrule(fis, c(2, 3, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(2, 3, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(2, 1, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(1, 1, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(3, 3, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(3, 2, 1, 1, 1, 1, 1))
+
+fis <- addrule(fis, c(3, 3, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(3, 2, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(3, 2, 3, 2, 3, 1, 1))
+fis <- addrule(fis, c(2, 1, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(3, 2, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(2, 1, 2, 3, 2, 1, 1))
+fis <- addrule(fis, c(2, 1, 3, 2, 2, 1, 1))
+fis <- addrule(fis, c(2, 2, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(3, 1, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(2, 1, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(2, 2, 3, 2, 3, 1, 1))
+fis <- addrule(fis, c(2, 2, 2, 3, 2, 1, 1))
+fis <- addrule(fis, c(3, 1, 3, 2, 3, 1, 1))
+fis <- addrule(fis, c(3, 1, 2, 3, 3, 1, 1))
+fis <- addrule(fis, c(2, 2, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(3, 1, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(3, 2, 2, 3, 2, 1, 1))
+fis <- addrule(fis, c(2, 3, 3, 3, 3, 1, 1))
+fis <- addrule(fis, c(3, 3, 3, 2, 2, 1, 1))
+fis <- addrule(fis, c(3, 3, 2, 2, 2, 1, 1))
+fis <- addrule(fis, c(2, 3, 3, 2, 2, 1, 1))
+fis <- addrule(fis, c(2, 2, 1, 1, 1, 1, 1))
+fis <- addrule(fis, c(2, 1, 1, 1, 1, 1, 1))
+
+```
+
+
+Visualizando o sistema de inferência criado 
+```{r}
+showGUI(fis)
+```
+
+```{r}
+Input_data <- matrix(c(1,1,1,1),1,2)
+evalfis(Input_data, fis)
+```
+
+
